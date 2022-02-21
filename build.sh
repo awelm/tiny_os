@@ -1,17 +1,14 @@
-HOST="ec2-user@ec2-107-20-88-122.compute-1.amazonaws.com"
+HOST="ec2-user@ec2-54-234-225-102.compute-1.amazonaws.com"
 PEM_FILE="~/Downloads/test.pem"
 
 
-ssh -i $PEM_FILE $HOST 'sudo yum install -y nasm genisoimage; rm -rf tiny_os;'
+ssh -i $PEM_FILE $HOST 'sudo yum install -y nasm genisoimage gcc;'
 
 rsync -a . $HOST:~/tiny_os -e "ssh -i $PEM_FILE"
 
 ssh -i $PEM_FILE $HOST '\
     cd tiny_os; \
-    nasm -f elf32 loader.s; \
-    ld -T link.ld -melf_i386 loader.o -o kernel.elf; \
-    cp kernel.elf iso/boot/; \
-    genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset utf8 -quiet -boot-info-table -o os.iso iso; \
+    make os.iso; \
 '
 
 scp -i $PEM_FILE $HOST:~/tiny_os/os.iso .
