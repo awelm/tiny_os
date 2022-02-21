@@ -1,9 +1,10 @@
+HOST="ec2-user@ec2-107-20-88-122.compute-1.amazonaws.com"
 PEM_FILE="~/Downloads/test.pem"
-HOST="ec2-user@ec2-54-91-119-58.compute-1.amazonaws.com"
 
-ssh -i $PEM_FILE $HOST 'rm -rf tiny_os;'
 
-scp -i $PEM_FILE -r ~/Desktop/hack/tiny-os $HOST:~/tiny_os
+ssh -i $PEM_FILE $HOST 'sudo yum install -y nasm genisoimage; rm -rf tiny_os;'
+
+rsync -a . $HOST:~/tiny_os -e "ssh -i $PEM_FILE"
 
 ssh -i $PEM_FILE $HOST '\
     cd tiny_os; \
