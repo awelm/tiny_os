@@ -1,4 +1,4 @@
-HOST="ec2-user@ec2-54-234-225-102.compute-1.amazonaws.com"
+HOST="ec2-user@ec2-3-88-225-230.compute-1.amazonaws.com"
 PEM_FILE="~/Downloads/test.pem"
 
 
