@@ -190,10 +190,21 @@ int serial_is_transmit_fifo_empty(unsigned int com)
     return inb(SERIAL_LINE_STATUS_PORT(com)) & 0x20;
 }
 
+// Write a byte to the specified serial port
 void write_to_serial_port(unsigned int com, char data) {
     while(serial_is_transmit_fifo_empty(com) == 0)
         ;
     outb(SERIAL_DATA_PORT(com), data);
+}
+
+void log(char *buf, unsigned int len) {
+    unsigned int com = SERIAL_COM1_BASE;
+    for(unsigned int i=0; i<len; i++)
+        write_to_serial_port(com, buf[i]); 
+    write_to_serial_port(com, '\n');
+    // spin until data is flushed
+    while(serial_is_transmit_fifo_empty(com) == 0)
+        ;
 }
 
 #endif /* INCLUDE_IO_H */
