@@ -1,6 +1,8 @@
 #include "io.h"
+#include "gdt.h"
 
 int kmain() {
+    init_gdt();
     configure_serial_port(SERIAL_COM1_BASE);
     char logMsg[21] = "This is my first log.";
     log(logMsg, 21);
