@@ -91,6 +91,18 @@ int write(char *buf, unsigned int len) {
     return len;
 }
 
+unsigned int strlen(char *c_str) {
+    int len = 0;
+    while(c_str[len] != '\0')
+        len++;
+    return len;
+}
+
+// Write C string to framebuffer
+int cout(char *c_str) {
+    return write(c_str, strlen(c_str));
+}
+
 /* IO ports */
 
 /* All the I/O ports are calculated relative to the data port. This is because
