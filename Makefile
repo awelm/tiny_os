@@ -6,7 +6,7 @@ LDFLAGS = -T link.ld -melf_i386
 AS = nasm
 ASFLAGS = -f elf
 
-all: kernel.elf
+all: os.iso user_program
 
 kernel.elf: $(OBJECTS)
 	ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
@@ -26,6 +26,10 @@ os.iso: kernel.elf
 
 run: os.iso
 	bochs -f bochsrc.txt -q
+
+user_program:
+	$(AS) -f bin program.s -o program
+	mv program iso/modules/
 
 %.o: %.c
 	$(CC) $(CFLAGS)  $< -o $@

@@ -1,8 +1,8 @@
 global loader                   ; the entry symbol for ELF
 
-MAGIC_NUMBER equ 0x1BADB002     ; define the magic number constant
-FLAGS        equ 0x0            ; multiboot flags
-CHECKSUM     equ -MAGIC_NUMBER  ; calculate the checksum
+MAGIC_NUMBER    equ 0x1BADB002  ; define the magic number constant
+FLAGS           equ 0x00000001  ; multiboot flags. ; tell GRUB to align modules
+CHECKSUM        equ -(MAGIC_NUMBER + FLAGS)  ; calculate the checksum
                                 ; (magic number + checksum + flags should equal 0)
 
 section .text:                  ; start of the text (code) section
@@ -15,6 +15,7 @@ align 4                         ; the code must be 4 byte aligned
 loader:                                         ; the loader label (defined as entry point in linker script)
     mov edx, 0xCAFEBABE                         ; place the number 0xCAFEBABE in the register eax
     mov esp, kernel_stack + KERNEL_STACK_SIZE   ; point esp to the start of the stack (end of memory area)
+    push ebx
     extern kmain
     call kmain
 

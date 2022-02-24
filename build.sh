@@ -9,7 +9,7 @@ rsync -a . $HOST:~/tiny_os -e "ssh -i $PEM_FILE"
 ssh -i $PEM_FILE $HOST '\
     cd tiny_os; \
     make clean; \
-    make os.iso; \
+    make all; \
 '
 
 scp -i $PEM_FILE $HOST:~/tiny_os/os.iso .
