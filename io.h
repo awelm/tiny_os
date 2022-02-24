@@ -1,8 +1,9 @@
 #ifndef INCLUDE_IO_H
 #define INCLUDE_IO_H
 
-// Frame Buffer start address
-char *fb = (char *) 0x000B8000;
+char *fb = (char *) 0x000B8000; // Frame Buffer start address
+#define FB_CHAR_LEN 80*25 // frame buffer character limit
+unsigned int fb_char_index = 0; // Keep track of last written frame buffer character index
 
 // Colors
 #define FB_BLACK     0
@@ -41,6 +42,10 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg)
     fb[i + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
 }
 
+void fb_write_char(unsigned int char_index, char c, unsigned char fg, unsigned char bg) {
+   fb_write_cell(char_index * 2, c, fg, bg);
+}
+
 /**
   *  Moves the cursor of the framebuffer to the given position
   *
@@ -54,16 +59,25 @@ void fb_move_cursor(unsigned short pos)
     outb(FB_DATA_PORT,    pos & 0x00FF);
 }
 
+void clear() {
+    for (unsigned int i = 0; i < FB_CHAR_LEN; i++)
+        fb_write_char(i,0,0,0);
+    fb_char_index = 0;
+}
+
 /**
   * Write a string to the framebuffer and automatically advance the cursor and
   * scroll screen if necessary. Old output won't be visible anymore
 */
 int write(char *buf, unsigned int len) {
-    unsigned int i;
-    for (i = 0; i < len; i++) {
-        fb_write_cell(i * 2, buf[i], FB_WHITE, FB_BLACK);
+    // clear screen if overflow detected
+    if(fb_char_index + len > FB_CHAR_LEN)
+        clear();
+    for (unsigned int i = 0; i < len; i++) {
+        fb_write_char(fb_char_index + i, buf[i], FB_WHITE, FB_BLACK);
     }
-    fb_move_cursor(i * 2);
+    fb_char_index += len;
+    fb_move_cursor(fb_char_index);
     return len;
 }
 

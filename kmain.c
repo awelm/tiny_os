@@ -1,8 +1,9 @@
 #include "io.h"
 
 int kmain() {
-    //fb_write_cell(0, 'A', FB_GREEN, FB_DARK_GREY);
-    char hello[5] = "hello";
-    write(hello, 5);
+    char world[10] = "helloworld";
+    for(int x=0; x<8*25; x++)
+        write(world, 10);
+    write(world, 10);
     return 0x12345678;
 }

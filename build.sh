@@ -1,4 +1,4 @@
-HOST="ec2-user@ec2-3-88-225-230.compute-1.amazonaws.com"
+HOST="ec2-user@ec2-44-202-230-248.compute-1.amazonaws.com"
 PEM_FILE="~/Downloads/test.pem"
 
 
@@ -8,6 +8,7 @@ rsync -a . $HOST:~/tiny_os -e "ssh -i $PEM_FILE"
 
 ssh -i $PEM_FILE $HOST '\
     cd tiny_os; \
+    make clean; \
     make os.iso; \
 '
 
