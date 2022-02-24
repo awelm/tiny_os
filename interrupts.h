@@ -3,6 +3,7 @@
 
 #include "pic.h"
 #include "io.h"
+#include "keyboard.h"
 
 #define INTERRUPTS_DESCRIPTOR_COUNT 256 
 #define INTERRUPTS_KEYBOARD 33 
@@ -83,10 +84,12 @@ void interrupts_install_idt()
 
 void interrupt_handler(__attribute__((unused)) struct cpu_state cpu, unsigned int interrupt, __attribute__((unused)) struct stack_state stack)
 {
+    unsigned char scan_code;
+	unsigned char ascii;
+
 	switch (interrupt){
+
 		case INTERRUPTS_KEYBOARD:
-            log("keyboard interrupt handler");
-            /*
 			scan_code = keyboard_read_scan_code();
 
 			if (scan_code <= KEYBOARD_MAX_ASCII) {
@@ -95,11 +98,12 @@ void interrupt_handler(__attribute__((unused)) struct cpu_state cpu, unsigned in
 				serial_configure_line(SERIAL_COM1_BASE);
 				char str[1];
 				str[0] = ascii;
-				serial_write(str, 1);
+                log("Received the following key from the keyboard:");
+                log_buffer(str, 1);
 			}
-            */
 			pic_acknowledge(interrupt);
 			break;
+
 		default:
 			break;
     }
