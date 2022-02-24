@@ -209,7 +209,7 @@ void write_to_serial_port(unsigned int com, char data) {
     outb(SERIAL_DATA_PORT(com), data);
 }
 
-void log(char *buf, unsigned int len) {
+void log_buffer(char *buf, unsigned int len) {
     unsigned int com = SERIAL_COM1_BASE;
     for(unsigned int i=0; i<len; i++)
         write_to_serial_port(com, buf[i]); 
@@ -217,6 +217,10 @@ void log(char *buf, unsigned int len) {
     // spin until data is flushed
     while(serial_is_transmit_fifo_empty(com) == 0)
         ;
+}
+
+void log(char *c_str) {
+    log_buffer(c_str, strlen(c_str));
 }
 
 #endif /* INCLUDE_IO_H */

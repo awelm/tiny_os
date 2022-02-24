@@ -4,14 +4,12 @@
 int kmain() {
     init_gdt();
     configure_serial_port(SERIAL_COM1_BASE);
-    char logMsg[] = "This is my first log.";
-    log(logMsg, strlen(logMsg));
+    log("This is my first log.");
 
-    char world[]= "helloworld";
     for(int x=0; x<8*25; x++)
-        cout(world);
-    cout(world);
-    char logMsgTwo[] = "This is my 2irst log.";
-    log(logMsgTwo, 21);
+        cout("helloworld");
+    cout("helloworld");
+    //char logMsgTwo[] = "This is my 2irst log.";
+    log("This is my 2irst log.");
     return 0x12345678;
 }
